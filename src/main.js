@@ -18,7 +18,9 @@ $.fn.inputVal = function (newValue) {
         }
         else {
             foreach(newValue, function (value, inputName) {
-                inputs[inputName].set(value);
+                if(inputs[inputName]){
+                    inputs[inputName].set(value);
+                }
             });
             return $self;
         }

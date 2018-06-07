@@ -1,6 +1,6 @@
-// jquery.input version 0.0.1
+// jquery.input version 0.1.0
 // https://github.com/DubFriend/jquery.input
-// (MIT) 09-08-2015
+// (MIT) 07-06-2018
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
 (function ($) {
 'use strict';
@@ -893,7 +893,7 @@ var buildFormInputs = function (fig) {
             addInputsGroup('checkbox', $self);
         }
         else {
-            //in all other cases default to a "text" input interface.
+            // in all other cases default to a "text" input interface.
             addInputsBasic('text', $self);
         }
     }
@@ -1038,7 +1038,9 @@ $.fn.inputVal = function (newValue) {
         }
         else {
             foreach(newValue, function (value, inputName) {
-                inputs[inputName].set(value);
+                if(inputs[inputName]){
+                    inputs[inputName].set(value);
+                }
             });
             return $self;
         }
