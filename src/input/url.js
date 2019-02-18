@@ -1,10 +1,7 @@
-var createInputURL = function (fig) {
-    var my = {},
-        self = createInputText(fig, my);
+import { InputText } from './text';
 
-    self.getType = function () {
-        return 'url';
-    };
-
-    return self;
-};
+export class InputURL extends InputText {
+	getType() {
+		return 'url';
+	}
+}

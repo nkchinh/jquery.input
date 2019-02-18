@@ -1,37 +1,43 @@
-var createInputCheckbox = function (fig) {
-    var my = {},
-        self = createInput(fig, my);
+import $ from 'jquery';
+import { inputEqualToArray, Input } from './base';
+import {
+	isArray,
+	foreach,
+} from '../library';
 
-    self.getType = function () {
-        return 'checkbox';
-    };
+export class InputCheckbox extends Input {
+	constructor(fig) {
+		super(fig);
+		this.$().change(e => this.publishChange(e, e.target));
+	}
 
-    self.get = function () {
-        var values = [];
-        self.$().filter(':checked').each(function () {
-            values.push($(this).val());
-        });
-        return values;
-    };
+	getType() {
+		return 'checkbox';
+	}
 
-    self.set = function (newValues) {
-        newValues = isArray(newValues) ? newValues : [newValues];
+	get() {
+		const values = [];
+		this.$().filter(':checked').each((_, ele) => {
+			values.push($(this).val(ele));
+		});
+		return values;
+	}
 
-        self.$().each(function () {
-            $(this).prop('checked', false);
-        });
+	set(newValues) {
+		// eslint-disable-next-line no-param-reassign
+		newValues = isArray(newValues) ? newValues : [newValues];
 
-        foreach(newValues, function (value) {
-            self.$().filter('[value="' + value + '"]')
-                .prop('checked', true);
-        });
-    };
+		this.$().each(function () {
+			$(this).prop('checked', false);
+		});
 
-    my.equalTo = inputEqualToArray;
+		foreach(newValues, (value) => {
+			this.$().filter(`[value="${value}"]`)
+				.prop('checked', true);
+		});
+	}
 
-    self.$().change(function (e) {
-        my.publishChange(e, this);
-    });
-
-    return self;
-};
+	equalTo(...args) {
+		inputEqualToArray(args);
+	}
+}

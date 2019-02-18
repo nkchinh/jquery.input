@@ -1,40 +1,38 @@
-var createInputRadio = function (fig) {
-    var my = {},
-        self = createInput(fig, my);
+import $ from 'jquery';
+import { Input } from './base';
 
-    self.getType = function () {
-        return 'radio';
-    };
+export class InputRadio extends Input {
+	constructor(fig) {
+		super(fig);
+		this.$().change(e => this.publishChange(e, e.target));
+	}
 
-    self.get = function () {
-        return self.$().filter(':checked').val() || null;
-    };
+	getType() {
+		return 'radio';
+	}
 
-    self.set = function (newValue) {
-        if(!newValue) {
-            self.$().each(function () {
-                $(this).prop('checked', false);
-            });
-            // self.$().prop('checked', false);
-        }
-        else {
-            self.$().filter('[value="' + newValue + '"]').prop('checked', true);
-        }
-    };
+	get() {
+		return this.$().filter(':checked').val() || null;
+	}
 
-    // self.set = my.buildSetter(function (newValue) {
-    //     console.log('set : ', newValue, self.$());
-    //     if(!newValue) {
-    //         self.$().prop('checked', false);
-    //     }
-    //     else {
-    //         self.$().filter('[value="' + newValue + '"]').prop('checked', true);
-    //     }
-    // });
+	set(newValue) {
+		if (!newValue) {
+			this.$().each(function () {
+				$(this).prop('checked', false);
+			});
+			// self.$().prop('checked', false);
+		} else {
+			this.$().filter(`[value="${newValue}"]`).prop('checked', true);
+		}
+	}
 
-    self.$().change(function (e) {
-        my.publishChange(e, this);
-    });
-
-    return self;
-};
+	// self.set = my.buildSetter(function (newValue) {
+	//     console.log('set : ', newValue, self.$());
+	//     if(!newValue) {
+	//         self.$().prop('checked', false);
+	//     }
+	//     else {
+	//     self.$().filter('[value="' + newValue + '"]').prop('checked', true);
+	//     }
+	// });
+}

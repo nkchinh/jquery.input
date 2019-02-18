@@ -1,15 +1,20 @@
-var createInputText = function (fig) {
-    var my = {},
-        self = createInput(fig, my);
+import { Input } from './base';
 
-    self.getType = function () {
-        return 'text';
-    };
+export class InputText extends Input {
+	constructor(fig) {
+		super(fig);
 
+		if (fig.type) {
+			this.$type = fig.type;
+		}
 
-    self.$().on('change keyup keydown', function (e) {
-        my.publishChange(e, this);
-    });
+		this.$().on(
+			'change keyup keydown',
+			e => this.publishChange(e, e.target),
+		);
+	}
 
-    return self;
-};
+	getType() {
+		return this.$type || 'text';
+	}
+}

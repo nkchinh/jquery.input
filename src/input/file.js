@@ -1,27 +1,28 @@
-var createInputFile = function (fig) {
-    var my = {},
-        self = createBaseInput(fig, my);
+import $ from 'jquery';
+import { last } from '../library';
+import { BaseInput } from './base';
 
-    self.getType = function () {
-        return 'file';
-    };
+export class InputFile extends BaseInput {
+	constructor(fig) {
+		super(fig);
+		this.$().change(e => this.publishChange(e, e.target));
+	}
 
-    self.get = function () {
-        return last(self.$().val().split('\\'));
-    };
+	getType() {
+		return 'file';
+	}
 
-    self.clear = function () {
-        // http://stackoverflow.com/questions/1043957/clearing-input-type-file-using-jquery
-        this.$().each(function () {
-            $(this).wrap('<form>').closest('form').get(0).reset();
-            $(this).unwrap();
-        });
-    };
+	get() {
+		return last(this.$().val().split('\\'));
+	}
 
-    self.$().change(function (e) {
-        my.publishChange(e, this);
-        // self.publish('change', self);
-    });
-
-    return self;
-};
+	clear() {
+		// eslint-disable-next-line max-len
+		// http://stackoverflow.com/questions/1043957/clearing-input-type-file-using-jquery
+		this.$().each((_, ele) => {
+			$(ele).wrap('<form>').closest('form').get(0)
+				.reset();
+			$(ele).unwrap();
+		});
+	}
+}

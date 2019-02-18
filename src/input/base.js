@@ -1,83 +1,96 @@
-var createBaseInput = function (fig, my) {
-    var self = mixinPubSub(),
-        $self = fig.$;
+import {
+	isArray, inArray, foreach,
+} from '../library';
+import PubSub from './PubSub';
 
-    self.getType = function () {
-        throw 'implement me (return type. "text", "radio", etc.)';
-    };
+export class BaseInput extends PubSub {
+	constructor(fig) {
+		super();
+		this.$self = fig.$;
+	}
 
-    self.$ = function (selector) {
-        return selector ? $self.find(selector) : $self;
-    };
+	/**
+	 * @abstract
+	 * @method
+	 * @name get
+	 */
 
-    self.disable = function () {
-        self.$().prop('disabled', true);
-        self.publish('isEnabled', false);
-    };
+	/**
+	 * @abstract
+	 * @method
+	 * @name set
+	 * @param {*} newValue new value
+	 */
 
-    self.enable = function () {
-        self.$().prop('disabled', false);
-        self.publish('isEnabled', true);
-    };
+	/**
+	 * @virtual
+	 */
+	getType() {
+		throw 'implement me (return type. "text", "radio", etc.)';
+	}
 
-    my.equalTo = function (a, b) {
-        return a === b;
-    };
+	$(selector) {
+		return selector ? this.$self.find(selector) : this.$self;
+	}
 
-    my.publishChange = (function () {
-        var oldValue;
-        return function (e, domElement) {
-            var newValue = self.get();
-            if(!my.equalTo(newValue, oldValue)) {
-                self.publish('change', { e: e, domElement: domElement });
-            }
-            oldValue = newValue;
-        };
-    }());
+	disable() {
+		this.$().prop('disabled', true);
+		this.publish('isEnabled', false);
+	}
 
-    return self;
-};
+	enable() {
+		this.$().prop('disabled', false);
+		this.publish('isEnabled', true);
+	}
+
+	equalTo(a, b) {
+		return a === b;
+	}
+
+	publishChange(e, domElement) {
+		const newValue = this.get();
+		if (!this.equalTo(newValue, this.oldValue)) {
+			this.publish('change', { e, domElement });
+		}
+		this.oldValue = newValue;
+	}
+}
 
 
-var createInput = function (fig, my) {
-    var self = createBaseInput(fig, my);
+export class Input extends BaseInput {
+	get() {
+		return this.$().val();
+	}
 
-    self.get = function () {
-        return self.$().val();
-    };
+	set(newValue) {
+		this.$().val(newValue);
+	}
 
-    self.set = function (newValue) {
-        self.$().val(newValue);
-    };
+	clear() {
+		this.set('');
+	}
 
-    self.clear = function () {
-        self.set('');
-    };
+	buildSetter(callback) {
+		return newValue => callback.call(this, newValue);
+	}
+}
 
-    my.buildSetter = function (callback) {
-        return function (newValue) {
-            callback.call(self, newValue);
-        };
-    };
+export function inputEqualToArray(a, b) {
+	// eslint-disable-next-line no-param-reassign
+	a = isArray(a) ? a : [a];
+	// eslint-disable-next-line no-param-reassign
+	b = isArray(b) ? b : [b];
 
-    return self;
-};
+	let isEqual = true;
+	if (a.length !== b.length) {
+		isEqual = false;
+	} else {
+		foreach(a, (value) => {
+			if (!inArray(b, value)) {
+				isEqual = false;
+			}
+		});
+	}
 
-var inputEqualToArray = function (a, b) {
-    a = isArray(a) ? a : [a];
-    b = isArray(b) ? b : [b];
-
-    var isEqual = true;
-    if(a.length !== b.length) {
-        isEqual = false;
-    }
-    else {
-        foreach(a, function (value) {
-            if(!inArray(b, value)) {
-                isEqual = false;
-            }
-        });
-    }
-
-    return isEqual;
-};
+	return isEqual;
+}

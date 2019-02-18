@@ -1,57 +1,59 @@
+import $ from 'jquery';
+import buildFormInputs from './buildFormInputs';
+import { call, foreach } from './library';
+
 $.fn.inputVal = function (newValue) {
-    var $self = $(this);
+	const $self = $(this);
 
-    var inputs = buildFormInputs({ $: $self });
+	const inputs = buildFormInputs({ $: $self });
 
-    if($self.is('input, textarea, select')) {
-        if(typeof newValue === 'undefined') {
-            return inputs[$self.attr('name')].get();
-        }
-        else {
-            inputs[$self.attr('name')].set(newValue);
-            return $self;
-        }
-    }
-    else {
-        if(typeof newValue === 'undefined') {
-            return call(inputs, 'get');
-        }
-        else {
-            foreach(newValue, function (value, inputName) {
-                if(inputs[inputName]){
-                    inputs[inputName].set(value);
-                }
-            });
-            return $self;
-        }
-    }
+	if ($self.is('input, textarea, select')) {
+		if (typeof newValue === 'undefined') {
+			return inputs[$self.attr('name')].get();
+		}
+
+		inputs[$self.attr('name')].set(newValue);
+		return $self;
+	}
+
+	if (typeof newValue === 'undefined') {
+		return call(inputs, 'get');
+	}
+
+	foreach(newValue, (value, inputName) => {
+		if (inputs[inputName]) {
+			inputs[inputName].set(value);
+		}
+	});
+
+	return $self;
 };
 
 $.fn.inputOnChange = function (callback) {
-    var $self = $(this);
-    var inputs = buildFormInputs({ $: $self });
-    foreach(inputs, function (input) {
-        input.subscribe('change', function (data) {
-            callback.call(data.domElement, data.e);
-        });
-    });
-    return $self;
+	const $self = $(this);
+	const inputs = buildFormInputs({ $: $self });
+	foreach(inputs, (input) => {
+		input.subscribe('change', (data) => {
+			callback.call(data.domElement, data.e);
+		});
+	});
+	return $self;
 };
 
 $.fn.inputDisable = function () {
-    var $self = $(this);
-    call(buildFormInputs({ $: $self }), 'disable');
-    return $self;
+	const $self = $(this);
+	call(buildFormInputs({ $: $self }), 'disable');
+	return $self;
 };
 
 $.fn.inputEnable = function () {
-    var $self = $(this);
-    call(buildFormInputs({ $: $self }), 'enable');
-    return $self;
+	const $self = $(this);
+	call(buildFormInputs({ $: $self }), 'enable');
+	return $self;
 };
 
 $.fn.inputClear = function () {
-    var $self = $(this);
-    call(buildFormInputs({ $: $self }), 'clear');
-    return $self;
+	const $self = $(this);
+	call(buildFormInputs({ $: $self }), 'clear');
+	return $self;
 };

@@ -1,26 +1,35 @@
-var createInputMultipleSelect = function (fig) {
-    var my = {},
-        self = createInput(fig, my);
+import { isArray } from '../library';
+import { inputEqualToArray, Input } from './base';
 
-    self.getType = function () {
-        return 'select[multiple]';
-    };
+export class InputMultipleSelect extends Input {
+	constructor(fig) {
+		super(fig);
 
-    self.get = function () {
-        return self.$().val() || [];
-    };
+		this.$().change(e => this.publishChange(e, e.target));
+	}
 
-    self.set = function (newValues) {
-        self.$().val(
-            newValues === '' ? [] : isArray(newValues) ? newValues : [newValues]
-        );
-    };
+	getType() {
+		return 'select[multiple]';
+	}
 
-    my.equalTo = inputEqualToArray;
+	get() {
+		return this.$().val() || [];
+	}
 
-    self.$().change(function (e) {
-        my.publishChange(e, this);
-    });
+	set(newValues) {
+		let val;
+		if (newValues === '') {
+			val = [];
+		} else if (isArray(newValues)) {
+			val = newValues;
+		} else {
+			val = [newValues];
+		}
 
-    return self;
-};
+		this.$().val(val);
+	}
+
+	equalTo(...args) {
+		inputEqualToArray(args);
+	}
+}

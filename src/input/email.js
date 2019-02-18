@@ -1,10 +1,7 @@
-var createInputEmail = function (fig) {
-    var my = {},
-        self = createInputText(fig, my);
+import { InputText } from './text';
 
-    self.getType = function () {
-        return 'email';
-    };
-
-    return self;
-};
+export class InputEmail extends InputText {
+	getType() {
+		return 'email';
+	}
+}

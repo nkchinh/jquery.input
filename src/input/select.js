@@ -1,14 +1,12 @@
-var createInputSelect = function (fig) {
-    var my = {},
-        self = createInput(fig, my);
+import { Input } from './base';
 
-    self.getType = function () {
-        return 'select';
-    };
+export class InputSelect extends Input {
+	constructor(fig) {
+		super(fig);
+		this.$().change(e => this.publishChange(e, e.target));
+	}
 
-    self.$().change(function (e) {
-        my.publishChange(e, this);
-    });
-
-    return self;
-};
+	getType() {
+		return 'select';
+	}
+}

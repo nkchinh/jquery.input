@@ -1,14 +1,12 @@
-var createInputRange = function (fig) {
-    var my = {},
-        self = createInput(fig, my);
+import { Input } from './base';
 
-    self.getType = function () {
-        return 'range';
-    };
+export class InputRange extends Input {
+	constructor(fig) {
+		super(fig);
+		this.$().change(e => this.publishChange(e, e.target));
+	}
 
-    self.$().change(function (e) {
-        my.publishChange(e, this);
-    });
-
-    return self;
-};
+	getType() {
+		return 'range';
+	}
+}

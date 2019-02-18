@@ -1,14 +1,14 @@
-var createInputButton = function (fig) {
-    var my = {},
-        self = createInput(fig, my);
+import { Input } from './base';
 
-    self.getType = function () {
-        return 'button';
-    };
+export class InputButton extends Input {
+	constructor(fig) {
+		super(fig);
 
-    self.$().on('change', function (e) {
-        my.publishChange(e, this);
-    });
+		this.$().on('change', e => this.publishChange(e, e.target));
+	}
 
-    return self;
-};
+	// eslint-disable-next-line class-methods-use-this
+	getType() {
+		return 'button';
+	}
+}

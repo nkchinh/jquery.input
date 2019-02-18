@@ -1,10 +1,7 @@
-var createInputPassword = function (fig) {
-    var my = {},
-        self = createInputText(fig, my);
+import { InputText } from './text';
 
-    self.getType = function () {
-        return 'password';
-    };
-
-    return self;
-};
+export class InputPassword extends InputText {
+	getType() {
+		return 'password';
+	}
+}

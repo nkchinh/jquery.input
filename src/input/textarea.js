@@ -1,14 +1,15 @@
-var createInputTextarea = function (fig) {
-    var my = {},
-        self = createInput(fig, my);
+import { Input } from './base';
 
-    self.getType = function () {
-        return 'textarea';
-    };
+export class InputTextarea extends Input {
+	constructor(fig) {
+		super(fig);
+		this.$().on(
+			'change keyup keydown',
+			e => this.publishChange(e, e.target),
+		);
+	}
 
-    self.$().on('change keyup keydown', function (e) {
-        my.publishChange(e, this);
-    });
-
-    return self;
-};
+	getType() {
+		return 'textarea';
+	}
+}
