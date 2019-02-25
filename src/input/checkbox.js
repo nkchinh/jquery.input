@@ -18,7 +18,7 @@ export class InputCheckbox extends Input {
 	get() {
 		const values = [];
 		this.$().filter(':checked').each((_, ele) => {
-			values.push($(this).val(ele));
+			values.push($(ele).val());
 		});
 		return values;
 	}

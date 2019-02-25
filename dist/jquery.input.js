@@ -1,8 +1,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('jquery')) :
   typeof define === 'function' && define.amd ? define(['jquery'], factory) :
-  (factory(global.jQuery));
-}(this, (function ($) { 'use strict';
+  (global = global || self, factory(global.jQuery));
+}(this, function ($) { 'use strict';
 
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
 
@@ -754,18 +754,16 @@
     }, {
       key: "get",
       value: function get() {
-        var _this2 = this;
-
         var values = [];
         this.$().filter(':checked').each(function (_, ele) {
-          values.push($(_this2).val(ele));
+          values.push($(ele).val());
         });
         return values;
       }
     }, {
       key: "set",
       value: function set(newValues) {
-        var _this3 = this;
+        var _this2 = this;
 
         // eslint-disable-next-line no-param-reassign
         newValues = isArray(newValues) ? newValues : [newValues];
@@ -773,7 +771,7 @@
           $(this).prop('checked', false);
         });
         foreach(newValues, function (value) {
-          _this3.$().filter("[value=\"".concat(value, "\"]")).prop('checked', true);
+          _this2.$().filter("[value=\"".concat(value, "\"]")).prop('checked', true);
         });
       }
     }, {
@@ -1218,4 +1216,4 @@
     return $self;
   };
 
-})));
+}));
